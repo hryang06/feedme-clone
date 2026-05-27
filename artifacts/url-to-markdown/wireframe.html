@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe: URL to Markdown</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root {
+    --w-bg: #f5f5f5;
+    --w-border: #ccc;
+    --w-text: #555;
+    --w-muted: #aaa;
+    --w-fill: #eee;
+  }
+
+  * {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    color: var(--w-text);
+  }
+
+  body { background: var(--w-bg); }
+
+  nav { position: sticky; top: 0; z-index: 40; background: var(--w-bg); border-bottom: 1px solid var(--w-border); overflow-x: auto; }
+  nav button { cursor: pointer; font-size: 13px; white-space: nowrap; }
+  nav button:hover { background: var(--w-fill); border-radius: 4px; }
+  nav button.active { font-weight: bold; border-bottom: 2px solid var(--w-text); }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .vp-toggle button {
+    font-size: 12px; padding: 2px 8px;
+    border: 1px solid var(--w-border); cursor: pointer; background: white;
+  }
+  .vp-toggle button:first-child { border-radius: 4px 0 0 4px; }
+  .vp-toggle button:last-child { border-radius: 0 4px 4px 0; border-left: none; }
+  .vp-toggle button.active { background: var(--w-text); color: white; }
+
+  body.viewport-mobile .screen-content {
+    max-width: 375px !important;
+    margin: 24px auto !important;
+    border: 2px solid var(--w-border);
+    border-radius: 24px;
+    min-height: 667px;
+    background: white;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px 16px !important;
+  }
+
+  .screen-notes {
+    background: #fffde7;
+    border-left: 3px solid #ffd54f;
+    padding: 12px 16px;
+    margin-top: 24px;
+    font-size: 13px;
+    border-radius: 0 4px 4px 0;
+  }
+  .screen-notes summary {
+    cursor: pointer; font-weight: bold; font-size: 12px;
+    color: #b0a050; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .screen-notes p { margin: 6px 0 2px; color: #777; }
+  .screen-notes ul { margin: 4px 0 0 16px; padding: 0; color: #777; }
+  .screen-notes li { margin: 2px 0; }
+
+  .w-input {
+    border: 1px solid var(--w-border); background: white;
+    padding: 8px 12px; border-radius: 6px; font-size: 13px; width: 100%;
+    box-sizing: border-box;
+  }
+  .w-btn {
+    border: 1px solid var(--w-border); background: white;
+    padding: 7px 14px; border-radius: 6px; font-size: 13px;
+    cursor: pointer; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .w-btn-primary { background: var(--w-text); color: white; border-color: var(--w-text); }
+  .w-btn-primary i { color: white; }
+
+  .w-preset-chip {
+    border: 1px solid var(--w-border); background: white;
+    padding: 4px 12px; border-radius: 16px; font-size: 12px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .w-preset-chip.selected { background: var(--w-fill); border-color: var(--w-text); font-weight: bold; }
+</style>
+</head>
+<body class="p-0 m-0 viewport-mobile">
+
+<nav class="flex items-center gap-3 px-4 py-2">
+  <span class="text-xs" style="color:var(--w-muted)">wireframe</span>
+  <button id="nav-0" onclick="show(0)" class="px-2 py-1">초기 화면</button>
+  <button id="nav-1" onclick="show(1)" class="px-2 py-1">결과 화면</button>
+  <button id="nav-2" onclick="show(2)" class="px-2 py-1">AI 패널</button>
+  <div class="vp-toggle flex ml-auto shrink-0">
+    <button id="vp-desktop" onclick="setViewport('desktop')">Desktop</button>
+    <button id="vp-mobile" onclick="setViewport('mobile')" class="active">Mobile</button>
+  </div>
+</nav>
+
+<!-- ─── Screen 0: 초기 화면 ─────────────────────────────────── -->
+<div id="screen-0" class="screen" data-scenario="scenario-2, scenario-8">
+  <div class="screen-content @container max-w-2xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      초기 화면
+    </h2>
+
+    <!-- App Header -->
+    <header class="flex items-center justify-between mb-8">
+      <span class="font-bold">URL to Markdown</span>
+      <button class="w-btn text-xs py-1 px-2">
+        <i data-lucide="moon" style="width:13px;height:13px;"></i>
+        다크모드
+      </button>
+    </header>
+
+    <!-- URL Input Section -->
+    <section>
+      <div class="flex gap-2 items-start">
+        <input class="w-input" type="text" placeholder="https://example.com/article" />
+        <button class="w-btn" style="opacity:0.35; cursor:not-allowed; padding:7px 10px;">
+          <i data-lucide="x" style="width:14px;height:14px;"></i>
+        </button>
+        <button class="w-btn w-btn-primary" style="opacity:0.35; cursor:not-allowed;">변환</button>
+      </div>
+      <!-- 인라인 에러 영역 (시나리오 8: URL 형식 오류 시 노출) -->
+      <div class="flex items-center gap-1 mt-2 text-xs" style="color:var(--w-muted);">
+        <i data-lucide="alert-circle" style="width:12px;height:12px;"></i>
+        <span style="font-style:italic;">[ 에러 메시지 — URL 형식 오류 시 표시 ]</span>
+      </div>
+    </section>
+
+    <div class="screen-notes">
+      <details open>
+        <summary>Notes</summary>
+        <ul>
+          <li>트리거: 앱 첫 진입, 또는 지우기(X) 클릭 후</li>
+          <li>인터랙션: URL 입력 → 변환·지우기 버튼 활성화</li>
+          <li>인터랙션: 유효한 URL 입력 후 "변환" 클릭 → 로딩 시작 후 결과 화면 전환</li>
+          <li>시나리오 8: 잘못된 URL 입력 후 "변환" 클릭 → 입력창 아래 인라인 에러 메시지 표시. 입력 수정 시 에러 사라짐</li>
+          <li>전환: 변환 성공 → 결과 화면 / 변환 실패 → 결과 화면(에러 상태)</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── Screen 1: 결과 화면 ─────────────────────────────────── -->
+<div id="screen-1" class="screen" data-scenario="scenario-1, scenario-3, scenario-4, scenario-9, scenario-10, scenario-11, scenario-12, scenario-13">
+  <div class="screen-content @container max-w-2xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      결과 화면
+    </h2>
+
+    <!-- App Header -->
+    <header class="flex items-center justify-between mb-8">
+      <span class="font-bold">URL to Markdown</span>
+      <button class="w-btn text-xs py-1 px-2">
+        <i data-lucide="moon" style="width:13px;height:13px;"></i>
+        다크모드
+      </button>
+    </header>
+
+    <!-- URL Input Section -->
+    <section class="mb-6">
+      <div class="flex gap-2 items-start">
+        <input class="w-input" type="text" value="https://example.com/article/async-await" />
+        <button class="w-btn" style="padding:7px 10px;">
+          <i data-lucide="x" style="width:14px;height:14px;"></i>
+        </button>
+        <button class="w-btn w-btn-primary">변환</button>
+      </div>
+    </section>
+
+    <!-- Result Area -->
+    <section style="border:1px solid var(--w-border); border-radius:8px; background:white; padding:16px;">
+
+      <!-- Result Header: 제목 + 저자 -->
+      <div style="border-bottom:1px solid var(--w-border); padding-bottom:12px; margin-bottom:14px;">
+        <div class="font-bold text-sm">Understanding Async/Await in JavaScript</div>
+        <!-- 시나리오 11: 제목 없는 경우 → "example.com" 표시 -->
+        <div class="text-xs mt-1" style="color:var(--w-muted);">
+          by Jane Smith · example.com
+        </div>
+        <!-- 시나리오 12: 저자 없는 경우 → 저자 행 자체 생략 -->
+      </div>
+
+      <!-- Rendered Markdown Content -->
+      <div style="font-size:12px; line-height:1.8; padding:10px; background:var(--w-fill); border-left:3px solid var(--w-border); border-radius:0 4px 4px 0; margin-bottom:14px;">
+        <div class="font-bold mb-1"># Introduction</div>
+        <p class="mb-2">Async/await is a modern JavaScript syntax that makes asynchronous code easier to read and write...</p>
+        <div class="font-bold mb-1">## Basic Usage</div>
+        <p class="mb-2">Declare a function with the <code>async</code> keyword, then use <code>await</code> inside it.</p>
+        <p>- See <span style="text-decoration:underline;">MDN Web Docs</span> for the full reference</p>
+        <p>- Related: <span style="text-decoration:underline;">Promises in JavaScript</span></p>
+      </div>
+
+      <!-- Export Controls -->
+      <div class="flex gap-2 flex-wrap">
+        <button class="w-btn text-xs py-1">
+          <i data-lucide="copy" style="width:12px;height:12px;"></i>
+          복사
+        </button>
+        <!-- 시나리오 3: 복사 완료 상태 (수초간 표시) →
+          <button class="w-btn text-xs py-1" style="border-color:var(--w-text); font-weight:bold;">
+            <i data-lucide="check" style="width:12px;height:12px;"></i>
+            복사됨
+          </button>
+        -->
+        <button class="w-btn text-xs py-1">
+          <i data-lucide="download" style="width:12px;height:12px;"></i>
+          다운로드
+        </button>
+        <button class="w-btn text-xs py-1">
+          <i data-lucide="bot" style="width:12px;height:12px;"></i>
+          AI에 보내기
+        </button>
+      </div>
+
+      <!-- 로드/추출 실패 에러 (시나리오 9, 10 — 결과 영역 내 에러) -->
+      <!--
+      <div class="flex items-start gap-2 text-xs">
+        <i data-lucide="alert-circle" style="width:14px;height:14px; flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <div class="font-bold">페이지를 불러오지 못했습니다</div>
+          <div style="color:var(--w-muted);">URL을 확인하거나 다시 시도해 주세요.</div>
+        </div>
+      </div>
+      -->
+
+    </section>
+
+    <div class="screen-notes">
+      <details open>
+        <summary>Notes</summary>
+        <ul>
+          <li>트리거: 변환 성공 후 진입 (로딩 인디케이터 표시됐다가 사라지며 전환)</li>
+          <li>인터랙션: "복사" 클릭 → 버튼 라벨이 "복사됨"으로 변경 후 수초 뒤 원복 (시나리오 3)</li>
+          <li>인터랙션: "다운로드" 클릭 → .md 파일 저장 (시나리오 4)</li>
+          <li>인터랙션: "AI에 보내기" 클릭 → AI 패널 화면으로 전환 (시나리오 5)</li>
+          <li>인터랙션: 지우기(X) 클릭 → 초기 화면으로 전환, 결과 영역 사라짐 (시나리오 2)</li>
+          <li>시나리오 9·10: 변환 실패 시 결과 영역에 에러 메시지 표시 (입력창에 URL 유지)</li>
+          <li>시나리오 11: 제목 없음 → 제목 자리에 도메인(예: example.com) 표시</li>
+          <li>시나리오 12: 저자 없음 → 저자 행 전체 숨김</li>
+          <li>시나리오 13: 다크모드 토글 → html 요소에 다크 테마 클래스 적용/해제</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── Screen 2: AI 패널 ─────────────────────────────────────── -->
+<div id="screen-2" class="screen" data-scenario="scenario-5, scenario-6, scenario-7">
+  <div class="screen-content @container max-w-2xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      AI 패널
+    </h2>
+
+    <!-- App Header -->
+    <header class="flex items-center justify-between mb-8">
+      <span class="font-bold">URL to Markdown</span>
+      <button class="w-btn text-xs py-1 px-2">
+        <i data-lucide="moon" style="width:13px;height:13px;"></i>
+        다크모드
+      </button>
+    </header>
+
+    <!-- URL Input Section -->
+    <section class="mb-6">
+      <div class="flex gap-2 items-start">
+        <input class="w-input" type="text" value="https://example.com/article/async-await" />
+        <button class="w-btn" style="padding:7px 10px;">
+          <i data-lucide="x" style="width:14px;height:14px;"></i>
+        </button>
+        <button class="w-btn w-btn-primary">변환</button>
+      </div>
+    </section>
+
+    <!-- Result Area -->
+    <section style="border:1px solid var(--w-border); border-radius:8px; background:white; padding:16px;">
+
+      <!-- Result Header -->
+      <div style="border-bottom:1px solid var(--w-border); padding-bottom:12px; margin-bottom:14px;">
+        <div class="font-bold text-sm">Understanding Async/Await in JavaScript</div>
+        <div class="text-xs mt-1" style="color:var(--w-muted);">by Jane Smith · example.com</div>
+      </div>
+
+      <!-- Rendered Markdown Content (compact) -->
+      <div style="font-size:12px; line-height:1.8; padding:10px; background:var(--w-fill); border-left:3px solid var(--w-border); border-radius:0 4px 4px 0; margin-bottom:14px;">
+        <div class="font-bold mb-1"># Introduction</div>
+        <p>Async/await is a modern JavaScript syntax...</p>
+        <p style="color:var(--w-muted);">[본문 계속]</p>
+      </div>
+
+      <!-- Export Controls -->
+      <div class="flex gap-2 flex-wrap mb-4">
+        <button class="w-btn text-xs py-1">
+          <i data-lucide="copy" style="width:12px;height:12px;"></i>
+          복사
+        </button>
+        <button class="w-btn text-xs py-1">
+          <i data-lucide="download" style="width:12px;height:12px;"></i>
+          다운로드
+        </button>
+        <button class="w-btn w-btn-primary text-xs py-1">
+          <i data-lucide="bot" style="width:12px;height:12px;"></i>
+          AI에 보내기 ▾
+        </button>
+      </div>
+
+      <!-- AI 프롬프트 패널 (expanded) -->
+      <div style="border-top:1px solid var(--w-border); padding-top:14px;">
+        <div class="text-xs font-bold mb-3" style="color:var(--w-muted);">프롬프트 선택 (선택 사항)</div>
+
+        <!-- 프리셋 버튼 3개 + 직접 입력 -->
+        <div class="flex gap-2 flex-wrap mb-3">
+          <button class="w-preset-chip">요약해줘</button>
+          <button class="w-preset-chip selected">한국어로 번역해줘</button>
+          <button class="w-preset-chip">쉽게 설명해줘</button>
+          <button class="w-preset-chip">직접 입력</button>
+        </div>
+
+        <!-- 직접 입력 텍스트영역 (시나리오 7: "직접 입력" 선택 시 노출) -->
+        <textarea class="w-input text-xs mb-3" rows="2" placeholder="프롬프트를 직접 입력하세요..."></textarea>
+
+        <!-- AI용 복사 -->
+        <button class="w-btn w-btn-primary text-xs py-1">
+          <i data-lucide="copy" style="width:12px;height:12px;"></i>
+          AI용 복사
+        </button>
+      </div>
+
+    </section>
+
+    <div class="screen-notes">
+      <details open>
+        <summary>Notes</summary>
+        <ul>
+          <li>트리거: 결과 화면에서 "AI에 보내기" 클릭</li>
+          <li>시나리오 5: 프롬프트 선택 없이 "AI용 복사" → Markdown만 복사</li>
+          <li>시나리오 6: 프리셋 3개 중 하나 선택(단일) 후 "AI용 복사" → [프롬프트]\n\n[Markdown] 복사</li>
+          <li>시나리오 7: "직접 입력" 선택 → 텍스트 입력창 노출. 텍스트 작성 후 "AI용 복사"</li>
+          <li>직접 입력 내용: 새 URL 변환 후에도 유지. 페이지 새로고침 시 초기화</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var screenIds = [];
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('screen-' + id).classList.add('active');
+  document.querySelectorAll('nav button[id^="nav-"]').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('nav-' + id).classList.add('active');
+}
+
+function setViewport(mode) {
+  document.body.classList.remove('viewport-mobile', 'viewport-desktop');
+  document.body.classList.add('viewport-' + mode);
+  document.querySelectorAll('.vp-toggle button').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('vp-' + mode).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('nav button[id^="nav-"]').forEach(function(b) {
+    screenIds.push(parseInt(b.id.replace('nav-', '')));
+  });
+  var first = document.querySelector('nav button[id^="nav-"]');
+  if (first) first.click();
+  lucide.createIcons();
+});
+</script>
+</body>
+</html>

@@ -19,6 +19,7 @@ Ideate → Define → Sketch → Plan → Build → Compound
 
 ### 커밋 규칙
 - Conventional 규칙을 따르고, feature 단위로 커밋한다.
+- 커밋 메세지는 영어로 작성한다.
 
 ## Testing
 

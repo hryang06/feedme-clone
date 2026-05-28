@@ -1,6 +1,14 @@
-# Harness Engineering Template
+# FeedMe Clone
 
-Next.js 16 + React 19 프로젝트 템플릿
+웹 페이지 URL을 붙여넣으면 본문을 Markdown으로 변환해주는 단일 페이지 도구.
+변환 결과를 복사하거나 파일로 내려받고, 프롬프트를 앞에 붙여 AI 서비스에 바로 보낼 수 있습니다.
+
+## 주요 기능
+
+- URL 입력 → Markdown 변환 (서버 사이드 fetching + defuddle)
+- 결과 내보내기: Markdown 복사 / `.md` 파일 다운로드 / AI용 복사
+- 프롬프트 프리셋 (요약 / 번역 / 쉽게 설명) + 직접 입력
+- 다크모드 지원
 
 ## 기술 스택
 
@@ -11,14 +19,14 @@ Next.js 16 + React 19 프로젝트 템플릿
 - **Lint**: ESLint
 - **Package Manager**: Bun
 
-## 시작하기
+## 실행 방법
 
 ```bash
-bun install
-bun dev
+bun install   # 의존성 설치
+bun dev       # 개발 서버 시작
 ```
 
-[http://localhost:3000](http://localhost:3000)에서 결과를 확인할 수 있습니다.
+[http://localhost:3000](http://localhost:3000)에서 확인할 수 있습니다.
 
 E2E 테스트를 처음 실행하기 전에 Chromium을 설치합니다:
 

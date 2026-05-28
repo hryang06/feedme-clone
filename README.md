@@ -1,5 +1,7 @@
 # FeedMe Clone
 
+**배포:** https://feedme-clone-kappa.vercel.app/
+
 웹 페이지 URL을 붙여넣으면 본문을 Markdown으로 변환해주는 단일 페이지 도구.
 변환 결과를 복사하거나 파일로 내려받고, 프롬프트를 앞에 붙여 AI 서비스에 바로 보낼 수 있습니다.
 

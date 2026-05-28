@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: "Kanban Todo",
-  description: "Kanban board application",
+  title: "feedme",
+  description: "A modern feed reader app for aggregating and reading your favorite content sources.",
 };
 
 export default function RootLayout({

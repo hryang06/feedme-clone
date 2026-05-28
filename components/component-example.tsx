@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import * as React from "react"
 
@@ -88,7 +88,7 @@ function CardExample() {
           className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale"
         />
         <CardHeader>
-          <CardTitle>Say hello to Observability Plus</CardTitle>
+          <CardTitle>Meet Observability Plus — we think you'll love it</CardTitle>
           <CardDescription>
             Switch to the improved way to explore your data, with natural
             language. Monitoring will no longer be available on the Pro plan in
